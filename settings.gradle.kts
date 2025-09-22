@@ -3,7 +3,7 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
-        gradlePluginPortal()
+        gradlePluginPortal() // Essencial para encontrar os plugins
     }
 }
 dependencyResolutionManagement {
