@@ -1,3 +1,4 @@
+// ARQUIVO: app/build.gradle.kts (Versão final e correta)
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -66,7 +67,7 @@ dependencies {
     // Navegação com versão explícita
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
-    // Google Maps & Location
+    // Google Maps & Location (A PARTE MAIS IMPORTANTE)
     implementation("com.google.maps.android:maps-compose:4.4.1")
     implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
