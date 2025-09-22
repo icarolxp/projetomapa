@@ -1,0 +1,2 @@
+toml
+lifecycle-runtime-ktx = { group = "", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }

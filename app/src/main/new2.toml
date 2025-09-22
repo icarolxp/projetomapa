@@ -1,0 +1,2 @@
+
+xandroidx-lifecycle-runtime-ktx = { group = "", name = "lifecycle-runtime-ktx", version.ref = "xandroidxLifecycleRuntimeKtx" }
