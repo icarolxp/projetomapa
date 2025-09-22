@@ -18,7 +18,7 @@ package="com.example.projetomapa">
 
     <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyDKCFeW5f9Cn_SEUPtrfA6Mgi4YHihQMTM"/> <activity
+        android:value="API_KEY_AQUI"/> <activity
     android:name=".activites.dashboard.MainActivity" android:exported="true"
     android:theme="@style/Theme.Projetomapa">
     <intent-filter>
