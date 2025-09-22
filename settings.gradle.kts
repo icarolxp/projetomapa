@@ -1,9 +1,8 @@
-// ARQUIVO: settings.gradle.kts (Raiz do Projeto)
 pluginManagement {
     repositories {
         google()
         mavenCentral()
-        gradlePluginPortal() // Essencial para encontrar os plugins
+        gradlePluginPortal()
     }
 }
 dependencyResolutionManagement {

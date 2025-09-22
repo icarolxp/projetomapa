@@ -1,8 +1,8 @@
-// ARQUIVO: MainActivity.kt (Versão final com todas as importações)
+// ARQUIVO: MainActivity.kt (Versão final com a data class corrigida)
 
 package com.example.projetomapa.activites.dashboard
 
-// A LISTA COMPLETA DE IMPORTAÇÕES. O ERRO É RESOLVIDO AQUI.
+// Lista completa de importações
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -45,8 +45,10 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
+import com.google.maps.android.compose.ExperimentalMapsComposeApi
 import kotlinx.coroutines.launch
 import java.util.*
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +63,8 @@ class MainActivity : ComponentActivity() {
 
 // --- DATA CLASSES ---
 data class BottomNavItem(val label: String, val icon: Int, val route: String)
+
+// 👇 A DEFINIÇÃO CORRETA DA CLASSE
 data class MapMarkerInfo(
     val id: String = UUID.randomUUID().toString(),
     val title: String,
@@ -121,8 +125,26 @@ fun LocationScreen() {
             LaunchedEffect(userLocation) { cameraPositionState.position = CameraPosition.fromLatLngZoom(userLocation!!, 14f) }
             val markers = remember(userLocation) {
                 listOf(
-                    MapMarkerInfo("Evento no Botequim", "Happy hour!", "Amazon Botequim", "19:00", "R$ 25,00", LatLng(userLocation!!.latitude + 0.005, userLocation!!.longitude + 0.005), R.drawable.profile, R.drawable.sample),
-                    MapMarkerInfo("Futebol de Quinta", "Jogo semanal.", "Arena da Amazônia", "21:00", "R$ 15,00", LatLng(userLocation!!.latitude - 0.005, userLocation!!.longitude - 0.005), R.drawable.location, R.drawable.btn_1)
+                    MapMarkerInfo(
+                        title = "Evento no Botequim",
+                        description = "Happy hour!",
+                        local = "Amazon Botequim",
+                        horario = "19:00",
+                        valor = "R$ 25,00",
+                        position = LatLng(userLocation!!.latitude + 0.005, userLocation!!.longitude + 0.005),
+                        profilePicRes = R.drawable.profile,
+                        eventImageRes = R.drawable.sample
+                    ),
+                    MapMarkerInfo(
+                        title = "Futebol de Quinta",
+                        description = "Jogo semanal.",
+                        local = "Arena da Amazônia",
+                        horario = "21:00",
+                        valor = "R$ 15,00",
+                        position = LatLng(userLocation!!.latitude - 0.005, userLocation!!.longitude - 0.005),
+                        profilePicRes = R.drawable.location,
+                        eventImageRes = R.drawable.btn_1
+                    )
                 )
             }
             GoogleMap(modifier = Modifier.fillMaxSize(), cameraPositionState = cameraPositionState, properties = MapProperties(isMyLocationEnabled = true)) {
