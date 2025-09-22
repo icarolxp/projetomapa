@@ -1,4 +1,4 @@
-// build.gradle.kts (App module)
+// ARQUIVO: app/build.gradle.kts (Módulo :app)
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -41,7 +41,8 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        // VERSÃO CORRIGIDA
+        kotlinCompilerExtensionVersion = "1.5.11"
     }
     packaging {
         resources {
@@ -59,6 +60,9 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.compose.foundation:foundation")
+
 
     // Google Maps
     implementation("com.google.android.gms:play-services-maps:18.2.0")
