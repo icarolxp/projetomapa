@@ -1,4 +1,5 @@
 // ARQUIVO: app/build.gradle.kts (Módulo :app)
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -41,7 +42,6 @@ android {
         compose = true
     }
     composeOptions {
-        // VERSÃO CORRIGIDA
         kotlinCompilerExtensionVersion = "1.5.11"
     }
     packaging {
@@ -62,6 +62,9 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.compose.foundation:foundation")
+
+    // 👇 A DEPENDÊNCIA QUE FALTAVA PARA OS ÍCONES
+    implementation("androidx.compose.material:material-icons-extended")
 
 
     // Google Maps

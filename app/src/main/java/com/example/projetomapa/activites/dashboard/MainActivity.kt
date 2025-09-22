@@ -1,8 +1,8 @@
-// ARQUIVO: MainActivity.kt
+// ARQUIVO: MainActivity.kt (Versão final com todas as importações)
 
 package com.example.projetomapa.activites.dashboard
 
-// Lista completa de importações para corrigir os erros
+// A LISTA COMPLETA DE IMPORTAÇÕES. O ERRO É RESOLVIDO AQUI.
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -61,7 +61,6 @@ class MainActivity : ComponentActivity() {
 
 // --- DATA CLASSES ---
 data class BottomNavItem(val label: String, val icon: Int, val route: String)
-
 data class MapMarkerInfo(
     val id: String = UUID.randomUUID().toString(),
     val title: String,
@@ -120,14 +119,12 @@ fun LocationScreen() {
         if (hasLocationPermission && userLocation != null) {
             val cameraPositionState = rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(userLocation!!, 14f) }
             LaunchedEffect(userLocation) { cameraPositionState.position = CameraPosition.fromLatLngZoom(userLocation!!, 14f) }
-
             val markers = remember(userLocation) {
                 listOf(
                     MapMarkerInfo("Evento no Botequim", "Happy hour!", "Amazon Botequim", "19:00", "R$ 25,00", LatLng(userLocation!!.latitude + 0.005, userLocation!!.longitude + 0.005), R.drawable.profile, R.drawable.sample),
                     MapMarkerInfo("Futebol de Quinta", "Jogo semanal.", "Arena da Amazônia", "21:00", "R$ 15,00", LatLng(userLocation!!.latitude - 0.005, userLocation!!.longitude - 0.005), R.drawable.location, R.drawable.btn_1)
                 )
             }
-
             GoogleMap(modifier = Modifier.fillMaxSize(), cameraPositionState = cameraPositionState, properties = MapProperties(isMyLocationEnabled = true)) {
                 markers.forEach { markerInfo ->
                     AdvancedMarker(state = rememberMarkerState(position = markerInfo.position), title = markerInfo.title, onClick = { selectedMarker = markerInfo; scope.launch { sheetState.show() }; true }) {
