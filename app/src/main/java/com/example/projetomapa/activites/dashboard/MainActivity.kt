@@ -1,3 +1,8 @@
+// ARQUIVO: MainActivity.kt
+
+package com.example.projetomapa.activites.dashboard
+
+// Lista completa de importações para corrigir os erros
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -9,7 +14,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -22,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -65,6 +70,8 @@ data class MapMarkerInfo(
     val horario: String,
     val valor: String,
     val position: LatLng,
+    val profilePicRes: Int,
+    val eventImageRes: Int
 )
 
 // --- ESTRUTURA PRINCIPAL E NAVEGAÇÃO ---
@@ -106,32 +113,21 @@ fun LocationScreen() {
         }
     }
     var selectedMarker by remember { mutableStateOf<MapMarkerInfo?>(null) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (hasLocationPermission && userLocation != null) {
             val cameraPositionState = rememberCameraPositionState { position = CameraPosition.fromLatLngZoom(userLocation!!, 14f) }
             LaunchedEffect(userLocation) { cameraPositionState.position = CameraPosition.fromLatLngZoom(userLocation!!, 14f) }
+
             val markers = remember(userLocation) {
                 listOf(
-                    MapMarkerInfo(
-                        title = "Evento no Botequim",
-                        description = "Happy hour da firma!",
-                        local = "Amazon Botequim • Staff",
-                        horario = "19:00",
-                        valor = "R$ 25,00",
-                        position = LatLng(userLocation!!.latitude + 0.005, userLocation!!.longitude + 0.005),
-                    ),
-                    MapMarkerInfo(
-                        title = "Futebol de Quinta",
-                        description = "Jogo semanal no campinho.",
-                        local = "Arena da Amazônia",
-                        horario = "21:00",
-                        valor = "R$ 15,00",
-                        position = LatLng(userLocation!!.latitude - 0.005, userLocation!!.longitude - 0.005),
-                    )
+                    MapMarkerInfo("Evento no Botequim", "Happy hour!", "Amazon Botequim", "19:00", "R$ 25,00", LatLng(userLocation!!.latitude + 0.005, userLocation!!.longitude + 0.005), R.drawable.profile, R.drawable.sample),
+                    MapMarkerInfo("Futebol de Quinta", "Jogo semanal.", "Arena da Amazônia", "21:00", "R$ 15,00", LatLng(userLocation!!.latitude - 0.005, userLocation!!.longitude - 0.005), R.drawable.location, R.drawable.btn_1)
                 )
             }
+
             GoogleMap(modifier = Modifier.fillMaxSize(), cameraPositionState = cameraPositionState, properties = MapProperties(isMyLocationEnabled = true)) {
                 markers.forEach { markerInfo ->
                     AdvancedMarker(state = rememberMarkerState(position = markerInfo.position), title = markerInfo.title, onClick = { selectedMarker = markerInfo; scope.launch { sheetState.show() }; true }) {
@@ -144,13 +140,21 @@ fun LocationScreen() {
         }
 
         if (selectedMarker != null) {
+            ModalBottomSheet(onDismissRequest = { scope.launch { sheetState.hide() }.invokeOnCompletion { if (!sheetState.isVisible) selectedMarker = null } }, sheetState = sheetState) {
+                Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Image(painter = painterResource(id = selectedMarker!!.eventImageRes), contentDescription = selectedMarker!!.title, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxWidth().height(180.dp))
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(selectedMarker!!.title, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.height(16.dp))
+                        DetailRow(icon = Icons.Default.LocationOn, text = selectedMarker!!.local)
                         Spacer(modifier = Modifier.height(8.dp))
+                        DetailRow(icon = Icons.Default.Schedule, text = selectedMarker!!.horario)
                         Spacer(modifier = Modifier.height(8.dp))
+                        DetailRow(icon = Icons.Default.Money, text = selectedMarker!!.valor, isBold = true)
                         Spacer(modifier = Modifier.height(24.dp))
-                            }
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
+                            ActionButton(icon = Icons.Default.Close, color = Color(0xFFE53935)) { scope.launch { sheetState.hide() }.invokeOnCompletion { selectedMarker = null } }
+                            ActionButton(icon = Icons.Default.Check, color = Color(0xFF43A047)) { scope.launch { sheetState.hide() }.invokeOnCompletion { selectedMarker = null } }
                         }
                     }
                     Spacer(modifier = Modifier.height(16.dp))
@@ -164,6 +168,23 @@ fun LocationScreen() {
 fun ProfileScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(text = "Tela de Perfil")
+    }
+}
+
+// --- COMPONENTES REUTILIZÁVEIS ---
+@Composable
+fun DetailRow(icon: ImageVector, text: String, isBold: Boolean = false) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(imageVector = icon, contentDescription = null, tint = Color.Gray)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = text, style = MaterialTheme.typography.bodyLarge, fontWeight = if (isBold) FontWeight.Bold else FontWeight.Normal)
+    }
+}
+
+@Composable
+fun ActionButton(icon: ImageVector, color: Color, onClick: () -> Unit) {
+    Button(onClick = onClick, shape = CircleShape, modifier = Modifier.size(64.dp), colors = ButtonDefaults.buttonColors(containerColor = color), contentPadding = PaddingValues(0.dp)) {
+        Icon(imageVector = icon, contentDescription = null, tint = Color.White)
     }
 }
 
@@ -194,6 +215,7 @@ fun MyBottomBar(navController: NavController) {
     }
 }
 
+// --- PREVIEW ---
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {

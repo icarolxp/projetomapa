@@ -1,3 +1,5 @@
+// ARQUIVO: HomeScreen.kt
+
 package com.example.projetomapa.activites.dashboard
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -41,7 +43,6 @@ data class StoreInfo(
     val rating: Double
 )
 
-
 // --- TELA PRINCIPAL (HOME) ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,7 +79,6 @@ fun HomeScreen() {
 }
 
 // --- COMPONENTES DA HOMESCREEN ---
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeTopAppBar() {
